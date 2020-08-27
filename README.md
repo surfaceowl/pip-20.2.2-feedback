@@ -1,12 +1,10 @@
-# pip-20.2.2-feedback
-feedback for pip resolution
+**Problem:**  pip does not correctly resolve dependency versions from pypi packages in one case.  Specifically, when installing only moto and idna together - pip misinterprets the upper end of the version range.  In this case, the dependency requirements are pinned in setup.py, rather than requirements.txt.
 
-**Problem:**  pip does not correctly resolve dependency versions from pypi packages in at least one case.  Specifically, when installing only moto and 
-idna together - pip misinterprets the upper end of the version range.  In this case, the dependency requirements are pinned in setup.py, rather than requirements.txt.
+[__see public repo for demo code__: https://github.com/surfaceowl/pip-20.2.2-feedback](https://github.com/surfaceowl/pip-20.2.2-feedback)  
 
 **Observations**
 -- default resolver reports two errors; while 2020-resolver reports only one (idna)
--- idna fails with both resolvers, because git reports moto requires `idna<2.9,>=2.5,`... but it does not - it requires "idna<3,>=2.5"
+-- idna fails with both resolvers, because git reports moto requires **`idna<2.9`**`,>=2.5,`... but the source actually **`idna<3`**`,>=2.5`...   the requirements file has idna==2.10  ...which is < 3....
 -- moto github repo (https://github.com/spulec/moto/blob/master/setup.py) lists "idna<3,>=2.5",
 -- it is not clear if this is a problem with pip, or a problem with the way data is being fed to pip in the package metadata.
 
